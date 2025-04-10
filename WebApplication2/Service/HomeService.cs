@@ -201,7 +201,19 @@ namespace WebApplication2.Service
         //ヒント:DeleteDataServiceメソッドを参考にしてください。
         public bool DeleteDataServiceTodo(int id)
         {
-            return false;
+            var query = (from m in _context.UserTodo
+                         where m.Id == id
+                         select m).ToList();
+            if (query != null)
+            {
+                _context.UserTodo.Remove(query[0]);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
