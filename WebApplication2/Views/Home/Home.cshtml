@@ -12,7 +12,9 @@
 <script type="text/javascript" src="https://cdn.datatables.net/fixedcolumns/3.2.6/js/dataTables.fixedColumns.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.2.5/js/dataTables.responsive.min.js"></script>
 <div id="container" style="width:100%;display:flex;flex-direction:column;align-items:center;">
+
     <h1 style="position:absolute;top:10%;left:22%;">見本</h1>
+
     <button onclick="ClickGetMessage()">Get Message from Server</button>
     <button onclick="ClickGetData()" style="margin-top:20px">Get Data from Database</button>
     <div class="card shadow mt-4" style="width:300px">
@@ -30,12 +32,15 @@
             </div>
         </div>
     </div>
+
     <button onclick="OpenModal()">Open Modal</button>
     <div id="openModal" class="modal fade" role="dialog" style="width:100%;justify-content:center;">
         <div class="modal-dialog modal-xl" style="max-width:500px;">
             <div class="modal-content text-center">
                 <div class="modal-header">
+
                     <h4 class="modal-title">新規作成</h4>
+
                     <button type="button" onclick="CloseModal()">x</button>
                 </div>
                 <div class="modal-body">
@@ -53,7 +58,9 @@
         <div class="modal-dialog modal-xl" style="max-width:500px;">
             <div class="modal-content text-center">
                 <div class="modal-header">
+
                     <h4 class="modal-title">編集</h4>
+
                     <button type="button" onclick="CloseEditModal()">x</button>
                 </div>
                 <div class="modal-body">
@@ -71,6 +78,7 @@
 </div>
 <div style="height:100%;border-right:1px solid black;"></div>
 <div style="width:100%;display:flex;flex-direction:column;align-items:center;">
+
     <h1 style="position:absolute;top:10%;right:22%;">演習</h1>
     <button onclick="ClickGetMessage()">Get Message from Server</button>
     <button onclick="ClickGetDataTodo()" style="margin-top:20px">Get Data from Database</button>
@@ -89,7 +97,9 @@
             </div>
         </div>
     </div>
+
     <button onclick="OpenModalTodo()">Open Modal</button>
+
     <div id="openModalTodo" class="modal fade" role="dialog" style="width:100%;justify-content:center;">
         <div class="modal-dialog modal-xl" style="max-width:500px;">
             <div class="modal-content text-center">
@@ -112,7 +122,9 @@
         <div class="modal-dialog modal-xl" style="max-width:500px;">
             <div class="modal-content text-center">
                 <div class="modal-header">
+
                     <h4 class="modal-title">編集</h4>
+
                     <button type="button" onclick="CloseEditModalTodo()">x</button>
                 </div>
                 <div class="modal-body">
@@ -295,6 +307,25 @@
     //step4目標：ClickEditTodo()を修正し、HomeControllerクラスのGetDataByIdTodo()にリクエストを送り、返されたデータをidがopenEditModalの要素に入れて表示させる。
     //ヒント：ClickEdit()を参考にして下さい。
     function ClickEditTodo(id){
+        $.ajax({
+            url:"/Home/GetDataByIdTodo",
+            type: "GET",
+            data: { id: id },
+            success :function (data) {
+                if (data.data.length != 0) {
+                   $('#nameEditTodo').val(data.data.name);
+                    $('#IdTodo').val(data.data.id);
+                  $('#openEditModalTodo').modal('show');
+                }
+                else{
+                     alert("No data");
+                }
+            },
+            error: function (error) {
+                alert("Error");
+            }    
+
+        });
         
     }
 
@@ -338,6 +369,28 @@
     //step4目標：EditModalTodo()を修正し、HomeControllerクラスのEditDataTodo()にリクエストを送り、結果をalert()で表示させる。
     //ヒント：EditModal()を参考にして下さい。
     function EditModalTodo() {
+        var name = $('#nameEditTodo').val();
+        var id = $('#IdTodo').val();
+        $.ajax({
+            url: "/Home/EditDataTodo",
+            type: "POST",
+            data: { name: name, id: id },
+            success: function (data) {
+                if (data.result == true) {
+                    alert("Success");
+                    $('#openEditModalTodo').modal('hide');
+                    $('#tableTodo').empty();
+                    ClickGetDataTodo();
+                }
+                else{
+                    alart ("Error");
+                }
+            },
+
+            error: function (error) {
+                alert("Error");
+            }
+        });
 
     }
 

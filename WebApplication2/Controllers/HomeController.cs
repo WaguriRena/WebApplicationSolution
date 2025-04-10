@@ -65,9 +65,10 @@ namespace WebApplication2.Controllers
 
         //目標:GetDataByIdTodoメソッドを修正し、Service/HomeService.csのGetDataByIdServiceTodoメソッドを呼び出して返されたデータをJson形式で返して下さい。
         //ヒント:GetDataByIdメソッドを参考にして下さい。
-        public ActionResult GetDataByIdTodo()
+
+        public ActionResult GetDataByIdTodo(int id)
         {
-            return null;
+            return Json(new { data = _service.GetDataByIdServiceTodo(id)});
         }
 
         [HttpPost]
